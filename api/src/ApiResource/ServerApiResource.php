@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\GraphQl\QueryCollection;
 use App\Entity\ServerEntity;
 use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityClassDtoStateProvider;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     graphQlOperations: [
@@ -35,16 +34,17 @@ class ServerApiResource
     public ArchitectureApiResource $architecture;
 
     /**
-     * Also tried:
-     *  - IpApiResource[]
-     *  - list<IpApiResource>
-     *  - list<int, IpApiResource>
-     *  - array<IpApiResource>
-     *  - array<int, IpApiResource>
-     *  - Collection<IpApiResource>
-     *  - Collection<int, IpApiResource>
-     *
-     * @var array<int, IpApiResource>
+     * @var IpApiResource[]
      */
     public array $ips = [];
+
+    public function addIp(IpApiResource $ip): void
+    {
+        $this->ips[] = $ip;
+    }
+
+    public function removeIp(IpApiResource $ip): void
+    {
+        unset($this->ips[array_search($ip, $this->ips)]);
+    }
 }

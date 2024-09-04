@@ -35,6 +35,9 @@ class ServerEntity
     #[ORM\ManyToOne(targetEntity: ArchitectureEntity::class)]
     private ArchitectureEntity $architecture;
 
+    /**
+     * @var Collection<IpEntity>
+     */
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: IpEntity::class)]
     private Collection $ips;
 
@@ -99,7 +102,7 @@ class ServerEntity
     }
 
     /**
-     * @return Collection<int, IpEntity>
+     * @return Collection<IpEntity>
      */
     public function getIps(): Collection
     {
@@ -109,6 +112,24 @@ class ServerEntity
     public function setIps(Collection $ips): ServerEntity
     {
         $this->ips = $ips;
+        return $this;
+    }
+
+    public function addIp(IpEntity $ip): ServerEntity
+    {
+        if (!$this->ips->contains($ip)) {
+            $this->ips->add($ip);
+        }
+
+        return $this;
+    }
+
+    public function removeIp(IpEntity $ip): ServerEntity
+    {
+        if ($this->ips->contains($ip)) {
+            $this->ips->removeElement($ip);
+        }
+
         return $this;
     }
 }
